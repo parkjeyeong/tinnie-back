@@ -1,0 +1,30 @@
+server:
+  port: 9991
+
+spring:
+  application:
+    name: tinnie-back
+  datasource:
+    driver-class-name: org.postgresql.Driver
+    url: ${DB_URL}
+    username: ${DB_USERNAME}
+    password: ${DB_PASSWORD}
+    hikari:
+      maximum-pool-size: 11
+      connection-init-sql: SET TIME ZONE 'Asia/Seoul';
+      connection-test-query: SELECT 1
+  config:
+    import: optional:classpath:application-API-KEY.yml
+
+ollama:
+  cloud:
+    base-url: https://ollama.com/api/chat
+    api-key: ${OLLAMA_API_KEY}
+    model: gpt-oss:20b
+    timeout-seconds: 60
+
+firebase:
+  credentials:
+    path: "firebase/tinnie-17225-firebase-adminsdk-fbsvc-2856f59d9d.json"
+  auth:
+    exclude-paths: "/api"

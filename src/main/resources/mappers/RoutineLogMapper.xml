@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="app.tinnie.mapper.RoutineLogMapper">
+  <resultMap id="RoutineLogResultMap" type="app.tinnie.domain.routine.dto.RoutineLogDto">
+    <id property="id" column="id" />
+    <result property="routineId" column="routine_id" />
+    <result property="logDate" column="log_date" />
+    <result property="status" column="status" />
+    <result property="checkedAt" column="checked_at" />
+  </resultMap>
+
+  <select id="selectRoutineLog" resultMap="RoutineLogResultMap">
+    SELECT id, routine_id, log_date, status, checked_at
+    FROM routine_log
+    WHERE routine_id = #{routineId}
+      AND log_date = #{logDate}
+  </select>
+
+  <select id="selectRoutineLogsByUserIdAndRange" resultMap="RoutineLogResultMap">
+    SELECT rl.id, rl.routine_id, rl.log_date, rl.status, rl.checked_at
+    FROM routine_log rl
+    INNER JOIN routine r
+      ON r.id = rl.routine_id
+    WHERE r.user_id = #{userId}
+      AND rl.log_date >= #{startDate}
+      AND rl.log_date <![CDATA[<=]]> #{endDate}
+    ORDER BY rl.log_date ASC, rl.checked_at ASC
+  </select>
+
+  <insert id="upsertRoutineLog">
+    INSERT INTO routine_log (routine_id, log_date, status)
+    VALUES (#{routineId}, #{logDate}, #{status})
+    ON CONFLICT (routine_id, log_date)
+    DO UPDATE SET status = EXCLUDED.status, checked_at = NOW()
+  </insert>
+</mapper>

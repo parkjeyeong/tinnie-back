@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="app.tinnie.mapper.RoutineMapper">
+  <resultMap id="RoutineResultMap" type="app.tinnie.domain.routine.dto.RoutineDto">
+    <id property="id" column="id" />
+    <result property="userId" column="user_id" />
+    <result property="title" column="title" />
+    <result property="goal" column="goal" />
+    <result property="time" column="time" />
+    <result property="startDate" column="start_date" />
+    <result property="endDate" column="end_date" />
+    <result property="isActive" column="is_active" />
+    <result property="isNotify" column="is_notify" />
+    <result property="color" column="color" />
+    <result property="createdAt" column="created_at" />
+  </resultMap>
+
+  <select id="selectRoutineById" parameterType="long" resultMap="RoutineResultMap">
+    SELECT id, user_id, title, goal, to_char(time, 'HH24:MI') AS time, start_date, end_date, is_active, is_notify, color, created_at
+    FROM routine
+    WHERE id = #{id}
+  </select>
+
+  <select id="selectRoutinesByUserId" parameterType="string" resultMap="RoutineResultMap">
+    SELECT id, user_id, title, goal, to_char(time, 'HH24:MI') AS time, start_date, end_date, is_active, is_notify, color, created_at
+    FROM routine
+    WHERE user_id = #{userId}
+    ORDER BY created_at DESC
+  </select>
+
+  <select id="selectRoutineDays" parameterType="long" resultType="int">
+    SELECT day_of_week
+    FROM routine_day
+    WHERE routine_id = #{routineId}
+    ORDER BY day_of_week ASC
+  </select>
+
+  <insert id="insertRoutine" parameterType="app.tinnie.domain.routine.dto.RoutineDto"
+          useGeneratedKeys="true" keyProperty="id">
+    INSERT INTO routine (user_id, title, goal, color, time, start_date, end_date, is_active, is_notify)
+    VALUES (#{userId}, #{title}, #{goal}, #{color}, #{time}::time, #{startDate}, #{endDate}, #{isActive}, #{isNotify})
+  </insert>
+
+  <update id="updateRoutine" parameterType="app.tinnie.domain.routine.dto.RoutineDto">
+    UPDATE routine
+    SET title = #{title},
+        goal = #{goal},
+        color = #{color},
+        time = #{time}::time,
+        start_date = #{startDate},
+        end_date = #{endDate},
+        is_active = #{isActive},
+        is_notify = #{isNotify}
+    WHERE id = #{id}
+  </update>
+
+  <delete id="deleteRoutine" parameterType="long">
+    DELETE FROM routine
+    WHERE id = #{id}
+  </delete>
+
+  <delete id="deleteRoutineDays" parameterType="long">
+    DELETE FROM routine_day
+    WHERE routine_id = #{routineId}
+  </delete>
+
+  <insert id="insertRoutineDays" parameterType="map">
+    INSERT INTO routine_day (routine_id, day_of_week)
+    VALUES
+    <foreach collection="daysOfWeek" item="day" separator=",">
+      (#{routineId}, #{day})
+    </foreach>
+  </insert>
+</mapper>

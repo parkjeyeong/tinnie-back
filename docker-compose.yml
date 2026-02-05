@@ -1,0 +1,13 @@
+version: '3'
+services:
+  app:
+    image: parkjeyeong/tinnie-back:0.0.1
+    container_name: tinnie-back
+    ports:
+      - "9991:9991"
+    networks:
+      - my-network
+
+networks:
+  my-network:
+    driver: bridge
