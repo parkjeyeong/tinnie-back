@@ -1,12 +1,6 @@
 package app.tinnie.service.routine.impl;
 
-import app.tinnie.domain.routine.dto.RoutineAiCreateRequest;
-import app.tinnie.domain.routine.dto.RoutineAiResponse;
-import app.tinnie.domain.routine.dto.RoutineAiRoutine;
-import app.tinnie.domain.routine.dto.RoutineCreateRequest;
-import app.tinnie.domain.routine.dto.RoutineDto;
-import app.tinnie.domain.routine.dto.RoutineLogDto;
-import app.tinnie.domain.routine.dto.RoutineUpdateRequest;
+import app.tinnie.domain.routine.dto.*;
 import app.tinnie.exception.RoutineNotFoundException;
 import app.tinnie.mapper.RoutineLogMapper;
 import app.tinnie.mapper.RoutineMapper;
@@ -23,11 +17,7 @@ import java.time.LocalDate;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.LinkedHashSet;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 @Service
 @RequiredArgsConstructor
