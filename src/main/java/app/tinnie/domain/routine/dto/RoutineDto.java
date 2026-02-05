@@ -13,7 +13,7 @@ public class RoutineDto {
   private Long id;
   private String userId;
   private String title;
-  private String goal;
+//  private String goal;
   private String time;
   private LocalDate startDate;
   private LocalDate endDate;

@@ -8,7 +8,7 @@
     <id property="id" column="id" />
     <result property="userId" column="user_id" />
     <result property="title" column="title" />
-    <result property="goal" column="goal" />
+<!--    <result property="goal" column="goal" />-->
     <result property="time" column="time" />
     <result property="startDate" column="start_date" />
     <result property="endDate" column="end_date" />
@@ -19,16 +19,16 @@
   </resultMap>
 
   <select id="selectRoutineById" parameterType="long" resultMap="RoutineResultMap">
-    SELECT id, user_id, title, goal, to_char(time, 'HH24:MI') AS time, start_date, end_date, is_active, is_notify, color, created_at
+    SELECT id, user_id, title, to_char(time, 'HH24:MI') AS time, start_date, end_date, is_active, is_notify, color, created_at
     FROM routine
     WHERE id = #{id}
   </select>
 
   <select id="selectRoutinesByUserId" parameterType="string" resultMap="RoutineResultMap">
-    SELECT id, user_id, title, goal, to_char(time, 'HH24:MI') AS time, start_date, end_date, is_active, is_notify, color, created_at
+    SELECT id, user_id, title, to_char(time, 'HH24:MI') AS time, start_date, end_date, is_active, is_notify, color, created_at
     FROM routine
     WHERE user_id = #{userId}
-    ORDER BY created_at DESC
+    ORDER BY time
   </select>
 
   <select id="selectRoutineDays" parameterType="long" resultType="int">
@@ -40,14 +40,13 @@
 
   <insert id="insertRoutine" parameterType="app.tinnie.domain.routine.dto.RoutineDto"
           useGeneratedKeys="true" keyProperty="id">
-    INSERT INTO routine (user_id, title, goal, color, time, start_date, end_date, is_active, is_notify)
-    VALUES (#{userId}, #{title}, #{goal}, #{color}, #{time}::time, #{startDate}, #{endDate}, #{isActive}, #{isNotify})
+    INSERT INTO routine (user_id, title, color, time, start_date, end_date, is_active, is_notify)
+    VALUES (#{userId}, #{title}, #{color}, #{time}::time, #{startDate}, #{endDate}, #{isActive}, #{isNotify})
   </insert>
 
   <update id="updateRoutine" parameterType="app.tinnie.domain.routine.dto.RoutineDto">
     UPDATE routine
     SET title = #{title},
-        goal = #{goal},
         color = #{color},
         time = #{time}::time,
         start_date = #{startDate},
